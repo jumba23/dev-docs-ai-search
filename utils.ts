@@ -37,5 +37,12 @@ export const createPineconeIndex = async ({
         metric: "cosine",
       },
     });
+    // 6. Log index creation completion
+    console.log(`Index ${indexName} created.`);
+    // 7. Wait for index to be initialized (time is specified in config.ts)
+    await new Promise((resolve) => setTimeout(resolve, timeout));
+  } else {
+    // 8. Log index already exists
+    console.log(`Index ${indexName} exists.`);
   }
 };
