@@ -127,7 +127,7 @@ export const updatePineconeIndex = async ({
 
 // function that queries Pinecone vector store AND queries LLM
 
-const queryPineconeVectorStoreAndQueryLLMS = async ({
+export const queryPineconeVectorStoreAndQueryLLM = async ({
   client,
   indexName,
   question,
