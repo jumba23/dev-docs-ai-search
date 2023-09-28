@@ -7,7 +7,7 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
     return () => {
       reset();
     };
-  }, [error, reset]);
+  }, [error]);
 
   return (
     <>

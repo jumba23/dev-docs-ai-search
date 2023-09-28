@@ -26,9 +26,15 @@ export const createPineconeIndex = async ({
   // 1. Initiate index existence check
   console.log(`Checking if index ${indexName} exists...`);
   // 2. Get list of existing indexes
-  const existingIndexes = await client.listIndexes();
+  const existingIndexesRaw = await client.listIndexes();
+  const existingIndexes = JSON.stringify(existingIndexesRaw);
+
   console.log(`Existing indexes: ${existingIndexes}`);
+
   // 3. Check if index does not exist, create it
+  const index = client.index("dev-docs-search");
+  console.log("Index instance: ", index);
+
   if (!existingIndexes.includes(indexName)) {
     // 4. Log index creation initiation
     console.log(`Index ${indexName} does not exist. Creating...`);
@@ -55,7 +61,7 @@ export const updatePineconeIndex = async ({
   docs,
 }: PineconeIndex) => {
   // 1.  Retrieve Pinecone index
-  const index = client.getIndex({ indexName });
+  const index = client.index({ indexName });
   // 2. Log the retrieval of the index
   console.log(`Retrieved index ${indexName}`);
   // 3. Process each document in the docs array
@@ -134,9 +140,14 @@ export const queryPineconeVectorStoreAndQueryLLM = async ({
   // 1. Start query process
   console.log("Starting query Pinecone vector store...");
   // 2. Retrieve the Pinecone index
-  const index = client.getIndex({ indexName });
+  console.log(`Retrieving index ${indexName}...`);
+  const index = client.index("dev-docs-search");
+  console.log("index: ", index);
   // 3. Create query embedding
   if (question) {
+    console.log(
+      `Calling OpenAI's Embedding endpoint with question ${question}...`
+    );
     const queryEmbedding = await new OpenAIEmbeddings().embedDocuments([
       question,
     ]);

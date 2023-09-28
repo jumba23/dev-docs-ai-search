@@ -11,15 +11,17 @@ export async function POST(req: NextRequest) {
     environment: process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT || "",
   });
 
-  const reqObject = {
-    client,
-    indexName,
-    body,
-  };
+  // const reqObject = {
+  //   client,
+  //   indexName,
+  //   body,
+  // };
 
-  console.log("reqObject: ", reqObject);
-
-  const text = await queryPineconeVectorStoreAndQueryLLM(reqObject);
+  const text = await queryPineconeVectorStoreAndQueryLLM({
+    client: client,
+    indexName: indexName,
+    question: body,
+  });
 
   return NextResponse.json({
     data: text,
