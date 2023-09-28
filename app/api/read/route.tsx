@@ -5,16 +5,19 @@ import { indexName } from "../../../config";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+
   const client = new Pinecone({
-    apiKey: process.env.PINECONE_API_KEY || "",
-    environment: process.env.PINECONE_ENVIRONMENT || "",
+    apiKey: process.env.NEXT_PUBLIC_PINECONE_API_KEY || "",
+    environment: process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT || "",
   });
 
   const reqObject = {
     client,
     indexName,
-    question: body.question,
+    body,
   };
+
+  console.log("reqObject: ", reqObject);
 
   const text = await queryPineconeVectorStoreAndQueryLLM(reqObject);
 

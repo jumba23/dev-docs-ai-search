@@ -17,30 +17,31 @@ export async function POST() {
   const vectorDimensions = 1536;
 
   const client = new Pinecone({
-    apiKey: process.env.PINECONE_API_KEY || "",
-    environment: process.env.PINECONE_ENVIRONMENT || "",
+    apiKey: process.env.NEXT_PUBLIC_PINECONE_API_KEY || "",
+    environment: process.env.NEXT_PUBLIC_PINECONE_ENVIRONMENT || "",
   });
 
-  const createReqObject = {
-    client,
-    indexName,
-    vectorDimensions,
-  };
-
-  const updateReqObject = {
-    client,
-    indexName,
-    docs,
-  };
+  let responseMessage = "An unknown error has occurred";
 
   try {
-    await createPineconeIndex(createReqObject);
-    await updatePineconeIndex(updateReqObject);
-  } catch (err) {
-    console.log("error: ", err);
-  }
+    await createPineconeIndex({
+      client: client,
+      indexName: indexName,
+      vectorDimension: vectorDimensions,
+    });
+    // await updatePineconeIndex({
+    //   client: client,
+    //   indexName: indexName,
+    //   docs: docs,
+    // });
 
-  return NextResponse.json({
-    data: "successfully created index and loaded data into pinecone...",
-  });
+    responseMessage =
+      "successfully created index and loaded data into pinecone...";
+    return NextResponse.json({ data: responseMessage });
+  } catch (err) {
+    console.error("Error:", err);
+
+    responseMessage = "Failed to create index or load data into pinecone";
+    return NextResponse.json({ data: responseMessage, status: 500 });
+  }
 }

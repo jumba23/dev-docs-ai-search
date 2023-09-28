@@ -27,17 +27,16 @@ export const createPineconeIndex = async ({
   console.log(`Checking if index ${indexName} exists...`);
   // 2. Get list of existing indexes
   const existingIndexes = await client.listIndexes();
+  console.log(`Existing indexes: ${existingIndexes}`);
   // 3. Check if index does not exist, create it
   if (!existingIndexes.includes(indexName)) {
     // 4. Log index creation initiation
     console.log(`Index ${indexName} does not exist. Creating...`);
     // 5. Create index
     await client.createIndex({
-      createRequest: {
-        name: indexName,
-        dimension: vectorDimension,
-        metric: "cosine",
-      },
+      name: indexName,
+      dimension: vectorDimension,
+      metric: "cosine",
     });
     // 6. Log index creation completion
     console.log(`Index ${indexName} created.`);

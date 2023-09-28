@@ -5,6 +5,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+
   async function createIndexAndEmbeddings() {
     try {
       const result = await fetch("/api/setup", {
@@ -47,7 +48,6 @@ export default function Home() {
       </button>
       {loading && <p>Asking AI ...</p>}
       {result && <p>{result}</p>}
-      {/* consider removing this button from the UI once the embeddings are created ... */}
       <button onClick={createIndexAndEmbeddings}>
         Create index and embeddings
       </button>

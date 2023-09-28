@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@pinecone-database/pinecone": "^1.0.1",
+    "encoding": "^0.1.13",
     "langchain": "^0.0.154",
     "next": "latest",
     "pdf-parse": "^1.1.1",
