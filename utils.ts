@@ -172,7 +172,7 @@ const queryPineconeVectorStoreAndQueryLLMS = async ({
       console.log(`Answer: ${result.text}`);
       return result.text;
     } else {
-      // 11. Log that there are no matches, so GPT will not be called
+      // 10. Log that there are no matches, so GPT will not be called
       console.log(`No matches found, so GPT will not be called.`);
       return null;
     }
