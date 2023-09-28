@@ -14,6 +14,7 @@ type PineconeIndex = {
   indexName: string;
   vectorDimension?: number;
   docs?: Document[];
+  question?: string;
 };
 
 // create Pinecone index
@@ -123,3 +124,11 @@ export const updatePineconeIndex = async ({
     }
   }
 };
+
+// function that queries Pinecone vector store AND queries LLM
+
+const queryPineconeVectorStoreAndQueryLLMS = async ({
+  client,
+  indexName,
+  question,
+}: PineconeIndex) => {};
