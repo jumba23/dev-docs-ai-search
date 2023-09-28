@@ -131,4 +131,50 @@ const queryPineconeVectorStoreAndQueryLLMS = async ({
   client,
   indexName,
   question,
-}: PineconeIndex) => {};
+}: PineconeIndex) => {
+  // 1. Start query process
+  console.log("Starting query Pinecone vector store...");
+  // 2. Retrieve the Pinecone index
+  const index = client.getIndex({ indexName });
+  // 3. Create query embedding
+  if (question) {
+    const queryEmbedding = await new OpenAIEmbeddings().embedDocuments([
+      question,
+    ]);
+    // 4. Query Pinecone index and return top 10 matches
+    let queryResponse = await index.query({
+      queryRequest: {
+        vector: queryEmbedding,
+        topK: 10,
+        includeMetadata: true,
+        includeValues: true,
+      },
+    });
+    // 5. Log the number of matches
+    console.log(`Found ${queryResponse.results.length} matches.`);
+    // 6. Log the questions being asked
+    console.log(`Asking question: ${question} ...`);
+    if (queryResponse.matches.length) {
+      // 7. Create an OpenAI instance and load the QAStuffChain
+      const llm = new OpenAI();
+      const chain = loadQAStuffChain(llm);
+      // 8. Extract and concatenate the text from the top 10 matches
+      const concatenatePageContent = queryResponse.matches
+        .map((match: any) => match.metadata.pageContent)
+        .join(" ");
+      const result = await chain.call({
+        input_documents: [
+          new Document({ pageContent: concatenatePageContent }),
+        ],
+        question: question,
+      });
+      // 9. Log the answer
+      console.log(`Answer: ${result.text}`);
+      return result.text;
+    } else {
+      // 11. Log that there are no matches, so GPT will not be called
+      console.log(`No matches found, so GPT will not be called.`);
+      return null;
+    }
+  }
+};
