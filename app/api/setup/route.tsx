@@ -29,11 +29,11 @@ export async function POST() {
       indexName: indexName,
       vectorDimension: vectorDimensions,
     });
-    // await updatePineconeIndex({
-    //   client: client,
-    //   indexName: indexName,
-    //   docs: docs,
-    // });
+    await updatePineconeIndex({
+      client: client,
+      indexName: indexName,
+      docs: docs,
+    });
 
     responseMessage =
       "successfully created index and loaded data into pinecone...";
