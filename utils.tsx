@@ -21,18 +21,17 @@ export const queryPineconeVectorStoreAndQueryLLM = async ({
   // 1. Start query process
   console.log("Querying Pinecone vector store...");
   // 2. Retrieve the Pinecone index
-  const index = client.Index(indexName);
-  // 3. Create query embedding
+  const index = client.index(indexName);
+  console.log(`Pinecone index retrieved: ${JSON.stringify(index)}`);
   if (!question) throw new Error("No question provided");
+  // 3. Create query embedding
   const queryEmbedding = await new OpenAIEmbeddings().embedQuery(question);
   // 4. Query Pinecone index and return top 10 matches
   let queryResponse = await index.query({
-    queryRequest: {
-      topK: 10,
-      vector: queryEmbedding,
-      includeMetadata: true,
-      includeValues: true,
-    },
+    topK: 10,
+    vector: queryEmbedding,
+    includeMetadata: true,
+    includeValues: true,
   });
   // 5. Log the number of matches
   console.log(`Found ${queryResponse.matches.length} matches...`);
